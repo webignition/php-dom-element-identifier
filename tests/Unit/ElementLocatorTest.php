@@ -1,0 +1,93 @@
+<?php
+
+namespace webignition\DomElementIdentifier\Tests\Unit;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use webignition\DomElementIdentifier\ElementLocator;
+use webignition\DomElementIdentifier\ElementLocatorInterface;
+use webignition\DomElementIdentifier\Enum\Type;
+
+class ElementLocatorTest extends TestCase
+{
+    public function testGetLocator(): void
+    {
+        $locator = '.selector';
+
+        $this->assertSame($locator, (new ElementLocator($locator))->getLocator());
+    }
+
+    public function testGetOrdinalPosition(): void
+    {
+        $elementLocatorWithoutOrdinalPosition = new ElementLocator('.selector');
+        $elementLocatorWithOrdinalPosition = new ElementLocator('.selector', 1);
+
+        $this->assertNull($elementLocatorWithoutOrdinalPosition->getOrdinalPosition());
+        $this->assertSame(1, $elementLocatorWithOrdinalPosition->getOrdinalPosition());
+    }
+
+    public function testIsCssSelector(): void
+    {
+        $this->assertTrue((new ElementLocator('.selector'))->isCssSelector());
+        $this->assertFalse((new ElementLocator('//h1'))->isCssSelector());
+        $this->assertFalse((new ElementLocator(''))->isCssSelector());
+    }
+
+    public function testIsXpathExpression(): void
+    {
+        $this->assertFalse((new ElementLocator('.selector'))->isXpathExpression());
+        $this->assertTrue((new ElementLocator('//h1'))->isXpathExpression());
+        $this->assertFalse((new ElementLocator(''))->isXpathExpression());
+    }
+
+    public function testGetType(): void
+    {
+        $this->assertSame(Type::CSS, new ElementLocator('.selector')->getType());
+        $this->assertSame(Type::XPATH, new ElementLocator('//h1')->getType());
+        $this->assertNull(new ElementLocator('')->getType());
+    }
+
+    #[DataProvider('toStringDataProvider')]
+    public function testToString(ElementLocatorInterface $locator, string $expectedString): void
+    {
+        $this->assertSame($expectedString, (string) $locator);
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public static function toStringDataProvider(): array
+    {
+        return [
+            'empty' => [
+                'locator' => new ElementLocator(''),
+                'expectedString' => '""',
+            ],
+            'css selector' => [
+                'locator' => new ElementLocator('.selector'),
+                'expectedString' => '".selector"',
+            ],
+            'css selector containing double quotes' => [
+                'locator' => new ElementLocator('a[href="https://example.org"]'),
+                'expectedString' => '"a[href=\"https://example.org\"]"',
+            ],
+            'xpath expression' => [
+                'locator' => new ElementLocator('//body'),
+                'expectedString' => '"//body"',
+            ],
+            'xpath expression containing double quotes' => [
+                'locator' => new ElementLocator('//*[@id="id"]'),
+                'expectedString' => '"//*[@id=\"id\"]"',
+            ],
+            'css selector with ordinal position' => [
+                'locator' => new ElementLocator('.selector', 3),
+                'expectedString' => '".selector":3',
+            ],
+        ];
+    }
+
+    public function testToStringDelimiterIsPublic(): void
+    {
+        $this->assertEquals(ElementLocator::DELIMITER, ElementLocator::DELIMITER);
+    }
+}
