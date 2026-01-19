@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier;
 
-use webignition\DomElementLocator\ElementLocatorInterface;
-
 interface ElementIdentifierInterface extends ElementLocatorInterface, \JsonSerializable
 {
     public function __toString(): string;

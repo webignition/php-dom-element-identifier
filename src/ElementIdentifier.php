@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier;
 
-use webignition\DomElementLocator\ElementLocator;
-
 class ElementIdentifier extends ElementLocator implements ElementIdentifierInterface
 {
     private ?ElementIdentifierInterface $parentIdentifier = null;
