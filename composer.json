@@ -38,7 +38,7 @@
         ]
     },
     "require": {
-        "php": "^7.4|^8.0|^8.1",
+        "php": "^8.4",
         "ext-json": "*",
         "webignition/php-dom-element-locator": "^0.6.0"
     },
