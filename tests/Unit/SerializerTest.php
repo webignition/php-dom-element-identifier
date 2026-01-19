@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use webignition\DomElementIdentifier\AttributeIdentifier;
 use webignition\DomElementIdentifier\ElementIdentifier;
@@ -14,10 +15,9 @@ use webignition\DomElementIdentifier\Serializer;
 class SerializerTest extends TestCase
 {
     /**
-     * @dataProvider toArrayDataProvider
-     *
      * @param array<mixed> $expectedData
      */
+    #[DataProvider('toArrayDataProvider')]
     public function testToArray(ElementIdentifierInterface $elementIdentifier, array $expectedData): void
     {
         $this->assertSame($expectedData, Serializer::toArray($elementIdentifier));
@@ -26,7 +26,7 @@ class SerializerTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function toArrayDataProvider(): array
+    public static function toArrayDataProvider(): array
     {
         return [
             'empty' => [
@@ -96,9 +96,7 @@ class SerializerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider deserializeFromJsonDataProvider
-     */
+    #[DataProvider('deserializeFromJsonDataProvider')]
     public function testDeserializeFromJsonSuccess(string $json, ElementIdentifierInterface $expectedIdentifier): void
     {
         $this->assertEquals($expectedIdentifier, Serializer::fromJson($json));
@@ -107,7 +105,7 @@ class SerializerTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function deserializeFromJsonDataProvider(): array
+    public static function deserializeFromJsonDataProvider(): array
     {
         return [
             'element selector, no parents' => [
@@ -171,9 +169,7 @@ class SerializerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider deserializeFromJsonReturnsNullDataProvider
-     */
+    #[DataProvider('deserializeFromJsonReturnsNullDataProvider')]
     public function testDeserializeFromJsonReturnsNull(string $json): void
     {
         $this->expectExceptionObject(new InvalidJsonException($json));
@@ -184,7 +180,7 @@ class SerializerTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function deserializeFromJsonReturnsNullDataProvider(): array
+    public static function deserializeFromJsonReturnsNullDataProvider(): array
     {
         return [
             'data is not an array' => [

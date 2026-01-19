@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use webignition\DomElementIdentifier\AttributeIdentifier;
 use webignition\DomElementIdentifier\ElementIdentifier;
@@ -24,10 +25,9 @@ class ElementIdentifierTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeDataProvider
-     *
      * @param array<int, ElementIdentifierInterface> $expectedScope
      */
+    #[DataProvider('getScopeDataProvider')]
     public function testGetScope(ElementIdentifierInterface $elementIdentifier, array $expectedScope): void
     {
         $this->assertEquals($expectedScope, $elementIdentifier->getScope());
@@ -36,7 +36,7 @@ class ElementIdentifierTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getScopeDataProvider(): array
+    public static function getScopeDataProvider(): array
     {
         return [
             'no scope' => [
@@ -71,53 +71,51 @@ class ElementIdentifierTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider toStringDataProvider
-     */
-    public function testToString(ElementIdentifierInterface $domIdentifier, string $expectedString): void
+    #[DataProvider('toStringDataProvider')]
+    public function testToString(ElementIdentifierInterface $identifier, string $expectedString): void
     {
-        $this->assertSame($expectedString, (string) $domIdentifier);
+        $this->assertSame($expectedString, (string) $identifier);
     }
 
     /**
      * @return array<mixed>
      */
-    public function toStringDataProvider(): array
+    public static function toStringDataProvider(): array
     {
         return [
             'empty' => [
-                'domIdentifier' => new ElementIdentifier(''),
+                'identifier' => new ElementIdentifier(''),
                 'expectedString' => '$""',
             ],
             'css selector' => [
-                'locator' => new ElementIdentifier('.selector'),
+                'identifier' => new ElementIdentifier('.selector'),
                 'expectedString' => '$".selector"',
             ],
             'css selector containing double quotes' => [
-                'locator' => new ElementIdentifier('a[href="https://example.org"]'),
+                'identifier' => new ElementIdentifier('a[href="https://example.org"]'),
                 'expectedString' => '$"a[href=\"https://example.org\"]"',
             ],
             'xpath expression' => [
-                'locator' => new ElementIdentifier('//body'),
+                'identifier' => new ElementIdentifier('//body'),
                 'expectedString' => '$"//body"',
             ],
             'xpath expression containing double quotes' => [
-                'locator' => new ElementIdentifier('//*[@id="id"]'),
+                'identifier' => new ElementIdentifier('//*[@id="id"]'),
                 'expectedString' => '$"//*[@id=\"id\"]"',
             ],
             'css selector with ordinal position' => [
-                'locator' => new ElementIdentifier('.selector', 3),
+                'identifier' => new ElementIdentifier('.selector', 3),
                 'expectedString' => '$".selector":3',
             ],
             'css selector with parent' => [
-                'locator' => (new ElementIdentifier('.child'))
+                'identifier' => (new ElementIdentifier('.child'))
                     ->withParentIdentifier(
                         new ElementIdentifier('.parent')
                     ),
                 'expectedString' => '$".parent" >> $".child"',
             ],
             'css selector with parent and grandparent' => [
-                'locator' => (new ElementIdentifier('.child'))
+                'identifier' => (new ElementIdentifier('.child'))
                     ->withParentIdentifier(
                         (new ElementIdentifier('.parent'))
                             ->withParentIdentifier(
@@ -149,9 +147,7 @@ class ElementIdentifierTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider fromAttributeIdentifierRemainsUnchangedDataProvider
-     */
+    #[DataProvider('fromAttributeIdentifierRemainsUnchangedDataProvider')]
     public function testFromAttributeIdentifierRemainsUnchanged(ElementIdentifierInterface $identifier): void
     {
         $this->assertEquals($identifier, ElementIdentifier::fromAttributeIdentifier($identifier));
@@ -160,7 +156,7 @@ class ElementIdentifierTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function fromAttributeIdentifierRemainsUnchangedDataProvider(): array
+    public static function fromAttributeIdentifierRemainsUnchangedDataProvider(): array
     {
         return [
             'element identifier, no ordinal position, no parent' => [
@@ -193,9 +189,7 @@ class ElementIdentifierTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider fromAttributeIdentifierIsChangedDataProvider
-     */
+    #[DataProvider('fromAttributeIdentifierIsChangedDataProvider')]
     public function testFromAttributeIdentifierIsChanged(
         ElementIdentifierInterface $identifier,
         ElementIdentifier $expectedIdentifier
@@ -206,7 +200,7 @@ class ElementIdentifierTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function fromAttributeIdentifierIsChangedDataProvider(): array
+    public static function fromAttributeIdentifierIsChangedDataProvider(): array
     {
         return [
             'attribute identifier with no ordinal position, no parent' => [
