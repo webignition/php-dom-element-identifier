@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use webignition\DomElementIdentifier\AttributeIdentifier;
 use webignition\DomElementIdentifier\ElementIdentifier;
 use webignition\DomElementIdentifier\ElementIdentifierInterface;
 use webignition\DomElementIdentifier\InvalidJsonException;
 use webignition\DomElementIdentifier\Serializer;
 
-class SerializerTest extends \PHPUnit\Framework\TestCase
+class SerializerTest extends TestCase
 {
     /**
      * @dataProvider toArrayDataProvider
@@ -140,7 +141,7 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
             'parent > child' => [
                 'json' => json_encode([
                     Serializer::KEY_PARENT => [
-                        Serializer::KEY_LOCATOR => '.parent'
+                        Serializer::KEY_LOCATOR => '.parent',
                     ],
                     Serializer::KEY_LOCATOR => '.child',
                 ]),
@@ -155,7 +156,7 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
                         Serializer::KEY_PARENT => [
                             Serializer::KEY_LOCATOR => '.grandparent',
                         ],
-                        Serializer::KEY_LOCATOR => '.parent'
+                        Serializer::KEY_LOCATOR => '.parent',
                     ],
                     Serializer::KEY_LOCATOR => '.child',
                 ]),

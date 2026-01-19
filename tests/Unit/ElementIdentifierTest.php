@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use webignition\DomElementIdentifier\AttributeIdentifier;
 use webignition\DomElementIdentifier\ElementIdentifier;
 use webignition\DomElementIdentifier\ElementIdentifierInterface;
 use webignition\DomElementIdentifier\Serializer;
 
-class ElementIdentifierTest extends \PHPUnit\Framework\TestCase
+class ElementIdentifierTest extends TestCase
 {
     public function testParentIdentifier(): void
     {
@@ -224,7 +225,7 @@ class ElementIdentifierTest extends \PHPUnit\Framework\TestCase
                 'expectedIdentifier' => (new ElementIdentifier('.child', 3))
                     ->withParentIdentifier(
                         new ElementIdentifier('.parent')
-                    )
+                    ),
             ],
             'attribute identifier has ordinal position, has element identifier parent no ordinal position' => [
                 'identifier' => (new AttributeIdentifier('.child', 'child_attr', 4))
@@ -234,7 +235,7 @@ class ElementIdentifierTest extends \PHPUnit\Framework\TestCase
                 'expectedIdentifier' => (new ElementIdentifier('.child', 4))
                     ->withParentIdentifier(
                         new ElementIdentifier('.parent', 5)
-                    )
+                    ),
             ],
             'attribute identifier, has element identifier parent with attribute identifier grandparent' => [
                 'identifier' => (new AttributeIdentifier('.child', 'child_attr'))
@@ -250,7 +251,7 @@ class ElementIdentifierTest extends \PHPUnit\Framework\TestCase
                             ->withParentIdentifier(
                                 new ElementIdentifier('.grandparent')
                             )
-                    )
+                    ),
             ],
             'attribute identifier, has attribute identifier parent with attribute identifier grandparent' => [
                 'identifier' => (new AttributeIdentifier('.child', 'child_attr'))
@@ -266,7 +267,7 @@ class ElementIdentifierTest extends \PHPUnit\Framework\TestCase
                             ->withParentIdentifier(
                                 new ElementIdentifier('.grandparent')
                             )
-                    )
+                    ),
             ],
         ];
     }
