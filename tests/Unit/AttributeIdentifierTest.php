@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use webignition\DomElementIdentifier\AttributeIdentifier;
 use webignition\DomElementIdentifier\AttributeIdentifierInterface;
 use webignition\DomElementIdentifier\ElementIdentifier;
 use webignition\DomElementIdentifier\Serializer;
 
-class AttributeIdentifierTest extends \PHPUnit\Framework\TestCase
+class AttributeIdentifierTest extends TestCase
 {
     public function testGetAttributeName(): void
     {
