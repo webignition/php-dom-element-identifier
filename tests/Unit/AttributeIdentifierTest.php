@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace webignition\DomElementIdentifier\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use webignition\DomElementIdentifier\AttributeIdentifier;
 use webignition\DomElementIdentifier\AttributeIdentifierInterface;
@@ -42,26 +43,24 @@ class AttributeIdentifierTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider toStringDataProvider
-     */
-    public function testToString(AttributeIdentifierInterface $domIdentifier, string $expectedString): void
+    #[DataProvider('toStringDataProvider')]
+    public function testToString(AttributeIdentifierInterface $identifier, string $expectedString): void
     {
-        $this->assertSame($expectedString, (string) $domIdentifier);
+        $this->assertSame($expectedString, (string) $identifier);
     }
 
     /**
      * @return array<mixed>
      */
-    public function toStringDataProvider(): array
+    public static function toStringDataProvider(): array
     {
         return [
             'css selector with attribute' => [
-                'locator' => new AttributeIdentifier('.selector', 'attribute_name'),
+                'identifier' => new AttributeIdentifier('.selector', 'attribute_name'),
                 'expectedString' => '$".selector".attribute_name',
             ],
             'css selector with parent, ordinal position and attribute name' => [
-                'locator' => (new AttributeIdentifier('.selector', 'attribute_name', 7))
+                'identifier' => (new AttributeIdentifier('.selector', 'attribute_name', 7))
                     ->withParentIdentifier(
                         new ElementIdentifier('.parent')
                     ),
