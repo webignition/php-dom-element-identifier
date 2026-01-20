@@ -53,5 +53,6 @@
         "allow-plugins": {
             "phpstan/extension-installer": true
         }
-    }
+    },
+    "abandoned": "smartassert/dom-identifier"
 }
